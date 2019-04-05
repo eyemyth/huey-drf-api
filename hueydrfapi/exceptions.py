@@ -1,0 +1,2 @@
+class TaskGroupDoesNotExist(BaseException):
+    pass
