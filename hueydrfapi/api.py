@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 from collections.abc import MutableSet
-from django.core.cache import cache
-from huey.contrib.djhuey import HUEY
 from uuid import uuid1
 from pickle import PickleError
+
+from django.core.cache import cache
+from huey.contrib.djhuey import HUEY
+from rest_framework.reverse import reverse
 
 from .exceptions import TaskGroupDoesNotExist
 
@@ -57,3 +59,7 @@ class TaskGroup(MutableSet):
             self.elements.remove(item)
         except ValueError:
             pass
+
+    @property
+    def url(self):
+        return reverse('hueydrfapi:taskgroup-detail', args=[self.task_group_id])
