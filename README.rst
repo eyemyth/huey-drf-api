@@ -16,7 +16,7 @@ A DRF API for Huey
 Documentation
 -------------
 
-The full documentation is at https://huey-drf-api.readthedocs.io.
+The full documentation is at https://huey-drf-api.readthedocs.io. (Except it isn't, not yet.)
 
 Quickstart
 ----------
@@ -31,7 +31,7 @@ Add it to your `INSTALLED_APPS`:
 
     INSTALLED_APPS = (
         ...
-        'hueydrfapi.apps.HueyDRFAPIConfig',
+        'hueydrfapi',
         ...
     )
 
@@ -39,12 +39,9 @@ Add Huey DRF API's URL patterns:
 
 .. code-block:: python
 
-    from hueydrfapi import urls as hueydrfapi_urls
-
-
     urlpatterns = [
         ...
-        url(r'^', include(hueydrfapi_urls)),
+        path('', include('hueydrfapi.urls', namespace='hueydrfapi')),
         ...
     ]
 
@@ -55,6 +52,8 @@ Features
 
 Running Tests
 -------------
+
+* TODO: write tests
 
 Does the code actually work?
 
