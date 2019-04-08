@@ -3,9 +3,11 @@ from huey.contrib.djhuey import HUEY
 
 
 class TaskSerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=512)
-    task_id = serializers.CharField(max_length=512, source='id')
-    revoke_id = serializers.CharField(max_length=512)
+    name = serializers.CharField()
+    args = serializers.ListField(child=serializers.CharField())
+    kwargs = serializers.DictField()
+    task_id = serializers.CharField(source='id')
+    revoke_id = serializers.CharField()
     eta = serializers.DateTimeField()
     retries = serializers.IntegerField()
     retry_delay = serializers.IntegerField()
