@@ -45,6 +45,25 @@ Add Huey DRF API's URL patterns:
         ...
     ]
 
+Ensure that you have caching set up for Django.
+
+Install `Huey <https://huey.readthedocs.io/en/latest/>`_. This package requires Huey >= 2.0. I recommend using Redis for Huey's queue and results store, as this is the easiest way to ensure there's one source of truth for the main Django process and Huey's consumer.
+
+Install `Django Rest Framework <https://www.django-rest-framework.org>_`. So far I've only tested on the latest DRF (3.9). It should work with lower versions, but I'll confirm all of that when I have tests to run.
+
+You can now create task groups and view them in the API. For example:
+
+.. code-block:: python
+from django.shortcuts import redirect
+from hueydrfapi import TaskGroup
+from myapp.tasks import my_task
+
+def run_a_bunch_of_tasks(iterable):
+   task_group = TaskGroup()
+   for item in iterable:
+      task_group.add(my_task(item))
+   return redirect(task_group.url)
+
 Features
 --------
 
