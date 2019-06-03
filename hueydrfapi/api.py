@@ -5,6 +5,7 @@ from pickle import PickleError
 
 from django.core.cache import cache
 from huey.contrib.djhuey import HUEY
+from huey.exceptions import HueyException
 from rest_framework.reverse import reverse
 
 from .exceptions import TaskGroupDoesNotExist
@@ -17,7 +18,6 @@ class TaskGroup(MutableSet):
 
     we expose the tasks themselves via __iter__
     '''
-
     def __init__(self, iterable=[], task_group_id=None):
         self.task_group_id = task_group_id
 
@@ -37,7 +37,10 @@ class TaskGroup(MutableSet):
         return iter([HUEY.deserialize_task(task) for task in self.elements])
 
     def __contains__(self, value):
-        return value in self.elements
+        try:
+            return HUEY.serialize_task(value) in self.elements
+        except HueyException:
+            return False
 
     def __len__(self):
         return len(self.elements)
@@ -51,12 +54,16 @@ class TaskGroup(MutableSet):
             if task not in self.elements:
                 self.elements.add(task)
             cache.set(self.task_group_id, self.elements)
+            return task
         except PickleError:
+            raise
+        except AttributeError:
             raise
 
     def discard(self, item):
         try:
-            self.elements.remove(item)
+            task = HUEY.serialize_task(item)
+            self.elements.remove(task)
         except ValueError:
             pass
 
