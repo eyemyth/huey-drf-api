@@ -54,6 +54,7 @@ Add Huey DRF API's URL patterns:
 You can now create task groups and view them in the API. For example:
 
 .. code-block:: python
+
     from django.shortcuts import redirect
     from hueydrfapi import TaskGroup
     from myapp.tasks import my_task
